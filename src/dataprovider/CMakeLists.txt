@@ -7,6 +7,8 @@ target_sources(kimera_vio
     "${CMAKE_CURRENT_LIST_DIR}/MonoDataProviderModule.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/RgbdDataProviderModule.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/StereoDataProviderModule.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/FlagsForDataProviders.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/EurocDataProvider.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/NoGtDataProvider.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/KittiDataProvider.cpp"
 )

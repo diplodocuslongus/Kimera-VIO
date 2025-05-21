@@ -168,7 +168,9 @@ target_compile_features(${PROJECT_NAME} PUBLIC
 add_library(kimera_vio::kimera_vio ALIAS kimera_vio)
 
 add_executable(stereoVIOEuroc ./examples/KimeraVIO.cpp)
+add_executable(stereoVIOEurocCustom ./examples/KimeraVIO_NoGT.cpp)
 target_link_libraries(stereoVIOEuroc PUBLIC kimera_vio::kimera_vio)
+target_link_libraries(stereoVIOEurocCustom PUBLIC kimera_vio::kimera_vio)
 
 ############################### TESTS ##########################################
 ### Add testing

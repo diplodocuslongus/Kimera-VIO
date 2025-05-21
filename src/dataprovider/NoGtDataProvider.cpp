@@ -7,14 +7,15 @@
  * -------------------------------------------------------------------------- */
 
 /**
- * @file   EurocDataProvider.h
- * @brief  Parse EUROC dataset.
+ * @file   NoGtDataProvider.h
+ * @brief  Parse dataset which doesn't contain ground truth data
  * @author Antoni Rosinol
  * @author Yun Chang
  * @author Luca Carlone
+ * mod diplodocuslongus
  */
 
-#include "kimera-vio/dataprovider/EurocDataProvider.h"
+#include "kimera-vio/dataprovider/NoGtDataProvider.h"
 #include "kimera-vio/dataprovider/FlagsForDataProviders.h"
 
 #include <algorithm>  // for max
@@ -37,9 +38,11 @@
 #include "kimera-vio/logging/Logger.h"
 #include "kimera-vio/utils/YamlParser.h"
 
+#include <cstdlib>  // Required for getenv
+
 // DEFINE_string(dataset_path,
-//               "/Users/Luca/data/MH_01_easy",
-//               "Path of dataset (i.e. Euroc, /Users/Luca/data/MH_01_easy).");
+//               "/home/pi/dataset/custom",
+//               "Path of custom dataset (i.e. Euroc, /home/userid/datasets/custom).");
 // DEFINE_int64(initial_k,
 //              0,
 //              "Initial frame to start processing dataset, "
@@ -55,7 +58,7 @@
 namespace VIO {
 
 /* -------------------------------------------------------------------------- */
-EurocDataProvider::EurocDataProvider(const std::string& dataset_path,
+NoGtDataProvider::NoGtDataProvider(const std::string& dataset_path,
                                      const int& initial_k,
                                      const int& final_k,
                                      const VioParams& vio_params)
@@ -69,7 +72,7 @@ EurocDataProvider::EurocDataProvider(const std::string& dataset_path,
       logger_(FLAGS_log_euroc_gt_data ? std::make_unique<EurocGtLogger>()
                                       : nullptr) {
   CHECK(!dataset_path_.empty())
-      << "Dataset path for EurocDataProvider is empty.";
+      << "Dataset path for NoGtDataProvider is empty.";
 
   // Start processing dataset from frame initial_k.
   // Useful to skip a bunch of images at the beginning (imu calibration).
@@ -87,7 +90,7 @@ EurocDataProvider::EurocDataProvider(const std::string& dataset_path,
 
   // Parse the actual dataset first, then run it.
   if (!shutdown_ && !dataset_parsed_) {
-    LOG(INFO) << "Parsing Euroc dataset...";
+    LOG(INFO) << "Parsing custom Euroc dataset...";
     parse();
     CHECK_GT(imu_measurements_.size(), 0u);
     dataset_parsed_ = true;
@@ -95,19 +98,19 @@ EurocDataProvider::EurocDataProvider(const std::string& dataset_path,
 }
 
 /* -------------------------------------------------------------------------- */
-EurocDataProvider::EurocDataProvider(const VioParams& vio_params)
-    : EurocDataProvider(FLAGS_dataset_path,
+NoGtDataProvider::NoGtDataProvider(const VioParams& vio_params)
+    : NoGtDataProvider(FLAGS_dataset_path,
                         FLAGS_initial_k,
                         FLAGS_final_k,
                         vio_params) {}
 
 /* -------------------------------------------------------------------------- */
-EurocDataProvider::~EurocDataProvider() {
+NoGtDataProvider::~NoGtDataProvider() {
   LOG(INFO) << "ETHDatasetParser destructor called.";
 }
 
 /* -------------------------------------------------------------------------- */
-bool EurocDataProvider::spin() {
+bool NoGtDataProvider::spin() {
   if (dataset_parsed_) {
     if (!is_imu_data_sent_) {
       // First, send all the IMU data. The flag is to avoid sending it several
@@ -133,18 +136,18 @@ bool EurocDataProvider::spin() {
       }
     }
   } else {
-    LOG(ERROR) << "Euroc dataset was not parsed.";
+    LOG(ERROR) << "Custom dataset was not parsed.";
   }
-  LOG_IF(INFO, shutdown_) << "EurocDataProvider shutdown requested.";
+  LOG_IF(INFO, shutdown_) << "NoGtDataProvider shutdown requested.";
   return false;
 }
 
-bool EurocDataProvider::hasData() const {
+bool NoGtDataProvider::hasData() const {
   return current_k_ < final_k_;
 }
 
 /* -------------------------------------------------------------------------- */
-bool EurocDataProvider::spinOnce() {
+bool NoGtDataProvider::spinOnce() {
   CHECK_LT(current_k_, std::numeric_limits<FrameId>::max())
       << "Are you sure you've initialized current_k_?";
   if (current_k_ >= final_k_) {
@@ -200,7 +203,7 @@ bool EurocDataProvider::spinOnce() {
   return true;
 }
 
-void EurocDataProvider::sendImuData() const {
+void NoGtDataProvider::sendImuData() const {
   CHECK(imu_single_callback_) << "Did you forget to register the IMU callback?";
   Timestamp previous_timestamp = -1;
   for (const ImuMeasurement& imu_meas : imu_measurements_) {
@@ -212,7 +215,7 @@ void EurocDataProvider::sendImuData() const {
 }
 
 /* -------------------------------------------------------------------------- */
-void EurocDataProvider::parse() {
+void NoGtDataProvider::parse() {
   VLOG(100) << "Using dataset path: " << dataset_path_;
   // Parse the dataset (ETH format).
   parseDataset();
@@ -227,7 +230,7 @@ void EurocDataProvider::parse() {
 }
 
 /* -------------------------------------------------------------------------- */
-bool EurocDataProvider::parseImuData(const std::string& input_dataset_path,
+bool NoGtDataProvider::parseImuData(const std::string& input_dataset_path,
                                      const std::string& imuName) {
   ///////////////// PARSE ACTUAL DATA //////////////////////////////////////////
   //#timestamp [ns],w_RS_S_x [rad s^-1],w_RS_S_y [rad s^-1],w_RS_S_z [rad s^-1],
@@ -307,7 +310,7 @@ bool EurocDataProvider::parseImuData(const std::string& input_dataset_path,
 }
 
 /* -------------------------------------------------------------------------- */
-bool EurocDataProvider::parseGtData(const std::string& input_dataset_path,
+bool NoGtDataProvider::parseGtData(const std::string& input_dataset_path,
                                     const std::string& gt_sensor_name) {
   CHECK(!input_dataset_path.empty());
   CHECK(!gt_sensor_name.empty());
@@ -435,7 +438,7 @@ bool EurocDataProvider::parseGtData(const std::string& input_dataset_path,
 }
 
 /* -------------------------------------------------------------------------- */
-bool EurocDataProvider::parseDataset() {
+bool NoGtDataProvider::parseDataset() {
   // Parse IMU data.
   CHECK(parseImuData(dataset_path_, kImuName));
 
@@ -456,7 +459,7 @@ bool EurocDataProvider::parseDataset() {
 
   // Parse Ground-Truth data.
   static const std::string ground_truth_name = "state_groundtruth_estimate0";
-  is_gt_available_ = parseGtData(dataset_path_, ground_truth_name);
+  is_gt_available_ = 0; // parseGtData(dataset_path_, ground_truth_name);
 
   clipFinalFrame();
 
@@ -475,7 +478,7 @@ bool EurocDataProvider::parseDataset() {
 }
 
 /* -------------------------------------------------------------------------- */
-bool EurocDataProvider::parseCameraData(const std::string& cam_name,
+bool NoGtDataProvider::parseCameraData(const std::string& cam_name,
                                         CameraImageLists* cam_list_i) {
   CHECK_NOTNULL(cam_list_i)
       ->parseCamImgList(dataset_path_ + "/mav0/" + cam_name, "data.csv");
@@ -483,7 +486,7 @@ bool EurocDataProvider::parseCameraData(const std::string& cam_name,
 }
 
 /* -------------------------------------------------------------------------- */
-bool EurocDataProvider::sanityCheckCameraData(
+bool NoGtDataProvider::sanityCheckCameraData(
     const std::vector<std::string>& camera_names,
     std::map<std::string, CameraImageLists>* camera_image_lists) const {
   CHECK_NOTNULL(camera_image_lists);
@@ -498,7 +501,7 @@ bool EurocDataProvider::sanityCheckCameraData(
 }
 
 /* -------------------------------------------------------------------------- */
-bool EurocDataProvider::sanityCheckCamSize(
+bool NoGtDataProvider::sanityCheckCamSize(
     CameraImageLists::ImgLists* left_img_lists,
     CameraImageLists::ImgLists* right_img_lists) const {
   CHECK_NOTNULL(left_img_lists);
@@ -517,7 +520,7 @@ bool EurocDataProvider::sanityCheckCamSize(
 }
 
 /* -------------------------------------------------------------------------- */
-bool EurocDataProvider::sanityCheckCamTimestamps(
+bool NoGtDataProvider::sanityCheckCamTimestamps(
     const CameraImageLists::ImgLists& left_img_lists,
     const CameraImageLists::ImgLists& right_img_lists,
     const CameraParams& left_cam_info) const {
@@ -554,7 +557,7 @@ bool EurocDataProvider::sanityCheckCamTimestamps(
   return true;
 }
 
-std::string EurocDataProvider::getDatasetName() {
+std::string NoGtDataProvider::getDatasetName() {
   if (dataset_name_.empty()) {
     // Find and store actual name (rather than path) of the dataset.
     size_t found_last_slash = dataset_path_.find_last_of("/\\");
@@ -575,7 +578,7 @@ std::string EurocDataProvider::getDatasetName() {
 }
 
 /* -------------------------------------------------------------------------- */
-gtsam::Pose3 EurocDataProvider::getGroundTruthRelativePose(
+gtsam::Pose3 NoGtDataProvider::getGroundTruthRelativePose(
     const Timestamp& previousTimestamp,
     const Timestamp& currentTimestamp) const {
   gtsam::Pose3 previousPose = getGroundTruthPose(previousTimestamp);
@@ -584,18 +587,18 @@ gtsam::Pose3 EurocDataProvider::getGroundTruthRelativePose(
 }
 
 /* -------------------------------------------------------------------------- */
-bool EurocDataProvider::isGroundTruthAvailable(
+bool NoGtDataProvider::isGroundTruthAvailable(
     const Timestamp& timestamp) const {
   return timestamp > gt_data_.map_to_gt_.begin()->first;
 }
 
 /* -------------------------------------------------------------------------- */
-bool EurocDataProvider::isGroundTruthAvailable() const {
+bool NoGtDataProvider::isGroundTruthAvailable() const {
   return is_gt_available_;
 }
 
 /* -------------------------------------------------------------------------- */
-VioNavState EurocDataProvider::getGroundTruthState(
+VioNavState NoGtDataProvider::getGroundTruthState(
     const Timestamp& timestamp) const {
   const auto& it_low =
       gt_data_.map_to_gt_.equal_range(timestamp).first;  // closest, non-lesser
@@ -615,7 +618,7 @@ VioNavState EurocDataProvider::getGroundTruthState(
 // pose is identity (we are interested in relative poses!)
 // [in]: initial nav state with pose, velocity in body frame,
 // [in]: gravity vector estimate in body frame.
-const InitializationPerformance EurocDataProvider::getInitializationPerformance(
+const InitializationPerformance NoGtDataProvider::getInitializationPerformance(
     const std::vector<Timestamp>& timestamps,
     const std::vector<gtsam::Pose3>& poses_ba,
     const VioNavState& init_nav_state,
@@ -693,7 +696,7 @@ const InitializationPerformance EurocDataProvider::getInitializationPerformance(
 }
 
 /* -------------------------------------------------------------------------- */
-size_t EurocDataProvider::getNumImages() const {
+size_t NoGtDataProvider::getNumImages() const {
   CHECK_GT(camera_names_.size(), 0u);
   const std::string& left_cam_name = camera_names_.at(0);
   const std::string& right_cam_name = camera_names_.at(0);
@@ -704,7 +707,7 @@ size_t EurocDataProvider::getNumImages() const {
 }
 
 /* -------------------------------------------------------------------------- */
-size_t EurocDataProvider::getNumImagesForCamera(
+size_t NoGtDataProvider::getNumImagesForCamera(
     const std::string& camera_name) const {
   const auto& iter = camera_image_lists_.find(camera_name);
   CHECK(iter != camera_image_lists_.end());
@@ -712,7 +715,7 @@ size_t EurocDataProvider::getNumImagesForCamera(
 }
 
 /* -------------------------------------------------------------------------- */
-bool EurocDataProvider::getImgName(const std::string& camera_name,
+bool NoGtDataProvider::getImgName(const std::string& camera_name,
                                    const size_t& k,
                                    std::string* img_filename) const {
   CHECK_NOTNULL(img_filename);
@@ -730,7 +733,7 @@ bool EurocDataProvider::getImgName(const std::string& camera_name,
 }
 
 /* -------------------------------------------------------------------------- */
-Timestamp EurocDataProvider::timestampAtFrame(const FrameId& frame_number) {
+Timestamp NoGtDataProvider::timestampAtFrame(const FrameId& frame_number) {
   CHECK_GT(camera_names_.size(), 0);
   CHECK_LT(frame_number,
            camera_image_lists_.at(camera_names_[0]).img_lists_.size());
@@ -739,7 +742,7 @@ Timestamp EurocDataProvider::timestampAtFrame(const FrameId& frame_number) {
       .first;
 }
 
-void EurocDataProvider::clipFinalFrame() {
+void NoGtDataProvider::clipFinalFrame() {
   // Clip final_k_ to the total number of images.
   const size_t& nr_images = getNumImages();
   if (final_k_ > nr_images) {
@@ -751,7 +754,7 @@ void EurocDataProvider::clipFinalFrame() {
   CHECK_LE(final_k_, nr_images);
 }
 /* -------------------------------------------------------------------------- */
-void EurocDataProvider::print() const {
+void NoGtDataProvider::print() const {
   LOG(INFO) << "------------------ ETHDatasetParser::print ------------------\n"
             << "Displaying info for dataset: " << dataset_path_;
   // For each of the 2 cameras.
@@ -772,23 +775,23 @@ void EurocDataProvider::print() const {
 //////////////////////////////////////////////////////////////////////////////
 
 /* -------------------------------------------------------------------------- */
-MonoEurocDataProvider::MonoEurocDataProvider(const std::string& dataset_path,
+MonoNoGtDataProvider::MonoNoGtDataProvider(const std::string& dataset_path,
                                              const int& initial_k,
                                              const int& final_k,
                                              const VioParams& vio_params)
-    : EurocDataProvider(dataset_path, initial_k, final_k, vio_params) {}
+    : NoGtDataProvider(dataset_path, initial_k, final_k, vio_params) {}
 
 /* -------------------------------------------------------------------------- */
-MonoEurocDataProvider::MonoEurocDataProvider(const VioParams& vio_params)
-    : EurocDataProvider(vio_params) {}
+MonoNoGtDataProvider::MonoNoGtDataProvider(const VioParams& vio_params)
+    : NoGtDataProvider(vio_params) {}
 
 /* -------------------------------------------------------------------------- */
-MonoEurocDataProvider::~MonoEurocDataProvider() {
+MonoNoGtDataProvider::~MonoNoGtDataProvider() {
   LOG(INFO) << "Mono ETHDataParser destructor called.";
 }
 
 /* -------------------------------------------------------------------------- */
-bool MonoEurocDataProvider::spin() {
+bool MonoNoGtDataProvider::spin() {
   if (dataset_parsed_) {
     if (!is_imu_data_sent_) {
       // First, send all the IMU data. The flag is to avoid sending it several
@@ -816,12 +819,12 @@ bool MonoEurocDataProvider::spin() {
   } else {
     LOG(ERROR) << "Euroc dataset was not parsed.";
   }
-  LOG_IF(INFO, shutdown_) << "EurocDataProvider shutdown requested.";
+  LOG_IF(INFO, shutdown_) << "NoGtDataProvider shutdown requested.";
   return false;
 }
 
 /* -------------------------------------------------------------------------- */
-bool MonoEurocDataProvider::spinOnce() {
+bool MonoNoGtDataProvider::spinOnce() {
   CHECK_LT(current_k_, std::numeric_limits<FrameId>::max())
       << "Are you sure you've initialized current_k_?";
   if (current_k_ >= final_k_) {
