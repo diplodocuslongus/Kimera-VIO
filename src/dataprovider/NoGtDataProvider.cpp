@@ -151,7 +151,7 @@ bool NoGtDataProvider::spinOnce() {
   CHECK_LT(current_k_, std::numeric_limits<FrameId>::max())
       << "Are you sure you've initialized current_k_?";
   if (current_k_ >= final_k_) {
-    LOG(INFO) << "Finished spinning Euroc dataset.";
+    LOG(INFO) << "Finished spinning Euroc (custom) dataset.";
     return false;
   }
 

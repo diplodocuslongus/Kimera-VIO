@@ -89,7 +89,7 @@ $BUILD_PATH/stereoVIOEurocCustom \
   --dataset_type="$DATASET_TYPE" \
   --dataset_path="$DATASET_PATH" \
   --initial_k=50 \
-  --final_k=10000 \
+  --final_k=55 \
   --euroc_custom_params_folder_path="$PARAMS_PATH" \
   --use_lcd="$USE_LCD" \
   --vocabulary_path="$VOCABULARY_PATH/ORBvoc.yml" \

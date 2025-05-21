@@ -1,6 +1,5 @@
 // all flags for dataprovider defined in a same place, or will not build due to multiple DEFINE locations
 
-// #include "FlagsForDataProviders.h" // 
 #include "kimera-vio/dataprovider/FlagsForDataProviders.h"
 
 DEFINE_string(dataset_path,
