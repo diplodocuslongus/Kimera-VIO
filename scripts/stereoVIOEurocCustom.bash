@@ -86,12 +86,12 @@ echo """ Launching:
 # Execute stereoVIOEuroc with given flags.
 # The flag --help will provide you with information about what each flag
 # does.
-# $BUILD_PATH/stereoVIOEurocCustom \
-valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all --track-fds=yes --log-file=valgrind_log.txt $BUILD_PATH/stereoVIOEurocCustom \
+# valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all --track-fds=yes --log-file=valgrind_log.txt $BUILD_PATH/stereoVIOEurocCustom \
+$BUILD_PATH/stereoVIOEurocCustom \
   --dataset_type="$DATASET_TYPE" \
   --dataset_path="$DATASET_PATH" \
-  --initial_k=55 \
-  --final_k=65 \
+  --initial_k=300 \
+  --final_k=400 \
   --euroc_custom_params_folder_path="$PARAMS_PATH" \
   --use_lcd="$USE_LCD" \
   --vocabulary_path="$VOCABULARY_PATH/ORBvoc.yml" \
