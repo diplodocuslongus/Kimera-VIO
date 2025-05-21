@@ -16,6 +16,8 @@
 #include "kimera-vio/frontend/RgbdCamera.h"
 
 #include "kimera-vio/frontend/Camera.h"
+#include <opencv2/viz/viz3d.hpp>
+#include <opencv2/viz/types.hpp>
 
 namespace VIO {
 
