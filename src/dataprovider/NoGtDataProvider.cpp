@@ -155,8 +155,10 @@ bool NoGtDataProvider::spinOnce() {
     return false;
   }
 
+    LOG(INFO) << "Cam param.";
   const CameraParams& left_cam_info = vio_params_.camera_params_.at(0);
   const CameraParams& right_cam_info = vio_params_.camera_params_.at(1);
+    LOG(INFO) << "Cam param end";
   const bool& equalize_image =
       vio_params_.frontend_params_.stereo_matching_params_.equalize_image_;
 
@@ -169,10 +171,12 @@ bool NoGtDataProvider::spinOnce() {
   // - make vio_pipeline actually equalize or transform images as necessary.
   std::string left_img_filename;
   bool available_left_img = getLeftImgName(current_k_, &left_img_filename);
+    LOG(INFO) << "left img " << current_k_ << " name " << left_img_filename;
   std::string right_img_filename;
   bool available_right_img = getRightImgName(current_k_, &right_img_filename);
   if (available_left_img && available_right_img) {
     // Both stereo images are available, send data to VIO
+    LOG(INFO) << "Both stereo images are available, send data to VIO";
     CHECK(left_frame_callback_);
     left_frame_callback_(
         std::make_unique<Frame>(current_k_,
@@ -182,6 +186,7 @@ bool NoGtDataProvider::spinOnce() {
                                 left_cam_info,
                                 UtilsOpenCV::ReadAndConvertToGrayScale(
                                     left_img_filename, equalize_image)));
+    LOG(INFO) << "check left callback";
     CHECK(right_frame_callback_);
     right_frame_callback_(
         std::make_unique<Frame>(current_k_,
@@ -191,6 +196,7 @@ bool NoGtDataProvider::spinOnce() {
                                 right_cam_info,
                                 UtilsOpenCV::ReadAndConvertToGrayScale(
                                     right_img_filename, equalize_image)));
+    LOG(INFO) << "check right callback";
   } else {
     LOG(ERROR) << "Missing left/right stereo pair, proceeding to the next one.";
   }
@@ -459,7 +465,7 @@ bool NoGtDataProvider::parseDataset() {
 
   // Parse Ground-Truth data.
   static const std::string ground_truth_name = "state_groundtruth_estimate0";
-  is_gt_available_ = 0; // parseGtData(dataset_path_, ground_truth_name);
+  is_gt_available_ = false; // parseGtData(dataset_path_, ground_truth_name);
 
   clipFinalFrame();
 

@@ -1,12 +1,13 @@
 #!/bin/bash
 ###################################################################
 # Fill the variables below
+# ./stereoVIOEurocCustom.bash -p /home/rpikim/datasets/oakd_lite
 
 # Specify path of the EuRoC dataset.
 # The path can be absolute, or relative to this file location.
 DATASET_PATH="/path/to/euroc/dataset"
 
-# Specify: 0 to run on EuRoC data, 1 to run on euroc custom, 2 Kitti (not supported)
+# Specify: 0 to run on EuRoC data, 1 to run on Kitti (not supported)
 DATASET_TYPE=1
 
 # Specify: 1 to enable the LoopClosureDetector, 0 to not.
@@ -24,7 +25,7 @@ LOG_OUTPUT=0
 BUILD_PATH="../build"
 
 # Params path: specify where the parameters for Kimera are.
-PARAMS_PATH="../params/Euroc"
+PARAMS_PATH="../params/euroc_custom/oakd_lite"
 # PARAMS_PATH="../params/EurocMono"  # use this for monocular-mode (left cam only)
 
 # Vocabulary path: specify where the vocabulary for loop closure is.
@@ -85,12 +86,12 @@ echo """ Launching:
 # Execute stereoVIOEuroc with given flags.
 # The flag --help will provide you with information about what each flag
 # does.
-# valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all --track-fds=yes --log-file=valgrind_log.txt $BUILD_PATH/stereoVIOEurocCustom \
-$BUILD_PATH/stereoVIOEurocCustom \
+# $BUILD_PATH/stereoVIOEurocCustom \
+valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all --track-fds=yes --log-file=valgrind_log.txt $BUILD_PATH/stereoVIOEurocCustom \
   --dataset_type="$DATASET_TYPE" \
   --dataset_path="$DATASET_PATH" \
   --initial_k=55 \
-  --final_k=765 \
+  --final_k=65 \
   --euroc_custom_params_folder_path="$PARAMS_PATH" \
   --use_lcd="$USE_LCD" \
   --vocabulary_path="$VOCABULARY_PATH/ORBvoc.yml" \
