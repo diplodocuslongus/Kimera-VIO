@@ -764,14 +764,14 @@ void NoGtDataProvider::print() const {
   LOG(INFO) << "------------------ ETHDatasetParser::print ------------------\n"
             << "Displaying info for dataset: " << dataset_path_;
   // For each of the 2 cameras.
-  CHECK_EQ(vio_params_.camera_params_.size(), camera_names_.size());
-  for (size_t i = 0; i < camera_names_.size(); i++) {
-    LOG(INFO) << "\n"
-              << (i == 0 ? "Left" : "Right")
-              << " camera name: " << camera_names_[i] << ", with params:\n";
-    vio_params_.camera_params_.at(i).print();
-    camera_image_lists_.at(camera_names_[i]).print();
-  }
+  // CHECK_EQ(vio_params_.camera_params_.size(), camera_names_.size());
+  // for (size_t i = 0; i < camera_names_.size(); i++) {
+  //   LOG(INFO) << "\n"
+  //             << (i == 0 ? "Left" : "Right")
+  //             << " camera name: " << camera_names_[i] << ", with params:\n";
+  //   vio_params_.camera_params_.at(i).print();
+  //   camera_image_lists_.at(camera_names_[i]).print();
+  // }
   if (FLAGS_minloglevel < 1) {
     gt_data_.print();
   }

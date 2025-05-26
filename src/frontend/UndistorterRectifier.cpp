@@ -93,20 +93,18 @@ gtsam::Vector3 UndistorterRectifier::GetBearingVector(
 
   // sanity check, try to distort point using gtsam and make sure you get
   // original pixel
-  // gtsam::Point2 distorted_keypoint_gtsam =
-  // cam_param.calibration_.uncalibrate(gtsam::Point2(versor(0),versor(1)));
-  // gtsam::Point2 distorted_keypoint_opencv =
-  // gtsam::Point2(distorted_keypoint.at<float>(0,0),distorted_keypoint.at<float>(0,1));
-  // gtsam::Point2 px_mismatch  = distorted_keypoint_opencv -
-  // distorted_keypoint_gtsam;
-  //
-  // if(px_mismatch.vector().norm() > 1){
-  //  std::cout << "distorted_keypoint: \n" << distorted_keypoint << std::endl;
-  //  std::cout << "distorted_keypoint_gtsam: \n" << distorted_keypoint_gtsam <<
-  //  std::endl; std::cout << "px_mismatch: \n" << px_mismatch << std::endl;
-  //  throw std::runtime_error("GetBearingVector: possible calibration
-  //  mismatch");
-  //}
+  //  gtsam::Point2 distorted_keypoint_gtsam = cam_param.calibration_.uncalibrate(gtsam::Point2(versor(0),versor(1)));
+  //  gtsam::Point2 distorted_keypoint_opencv =
+  //  gtsam::Point2(distorted_keypoint.at<float>(0,0),distorted_keypoint.at<float>(0,1));
+  //  gtsam::Point2 px_mismatch  = distorted_keypoint_opencv -
+  //  distorted_keypoint_gtsam;
+  // 
+  //  if(px_mismatch.vector().norm() > 1){
+  //   std::cout << "distorted_keypoint: \n" << distorted_keypoint << std::endl;
+  //   std::cout << "distorted_keypoint_gtsam: \n" << distorted_keypoint_gtsam <<
+  //   std::endl; std::cout << "px_mismatch: \n" << px_mismatch << std::endl;
+  //   throw std::runtime_error("GetBearingVector: possible calibration mismatch");
+  // }
 
   // Return unit norm vector
   return versor.normalized();

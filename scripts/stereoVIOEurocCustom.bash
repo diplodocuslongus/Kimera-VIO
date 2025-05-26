@@ -7,7 +7,7 @@
 # The path can be absolute, or relative to this file location.
 DATASET_PATH="/path/to/euroc/dataset"
 
-# Specify: 0 to run on EuRoC data, 1 to run on Kitti (not supported)
+# Specify: 0 to run on EuRoC data, 1 to run on Euroc style without ground truth,2 Kitti (not supported)
 DATASET_TYPE=1
 
 # Specify: 1 to enable the LoopClosureDetector, 0 to not.
@@ -25,8 +25,10 @@ LOG_OUTPUT=0
 BUILD_PATH="../build"
 
 # Params path: specify where the parameters for Kimera are.
-PARAMS_PATH="../params/euroc_custom/oakd_lite"
-# PARAMS_PATH="../params/EurocMono"  # use this for monocular-mode (left cam only)
+# PARAMS_PATH="../params/D455" # will not crash but no good trajectory
+# PARAMS_PATH="../params/euroc_custom/oakd_lite" # crash with cv Mat assertion
+# PARAMS_PATH="../params/euroc_custom/oakd_lite_mono" # no crash
+PARAMS_PATH="../params/euroc_custom/oakd_lite_26052025" # no crash
 
 # Vocabulary path: specify where the vocabulary for loop closure is.
 VOCABULARY_PATH="../vocabulary"
@@ -55,7 +57,7 @@ else
           shift ;;
       -lcd) USE_LCD=1
            echo "Run VIO with LoopClosureDetector!" ;;
-      -log) LOG_OUTPUT=1
+      -log) LOG_OUTPUT=0
            echo "Logging output!";;
       --)
           shift # The double dash which separates options from parameters
@@ -90,8 +92,8 @@ echo """ Launching:
 $BUILD_PATH/stereoVIOEurocCustom \
   --dataset_type="$DATASET_TYPE" \
   --dataset_path="$DATASET_PATH" \
-  --initial_k=300 \
-  --final_k=400 \
+  --initial_k=50 \
+  --final_k=200 \
   --euroc_custom_params_folder_path="$PARAMS_PATH" \
   --use_lcd="$USE_LCD" \
   --vocabulary_path="$VOCABULARY_PATH/ORBvoc.yml" \
