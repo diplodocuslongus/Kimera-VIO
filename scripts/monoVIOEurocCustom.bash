@@ -1,7 +1,7 @@
 #!/bin/bash
 ###################################################################
 # Fill the variables below
-# ./stereoVIOEurocCustom.bash -p /home/rpikim/datasets/oakd_lite
+# ./monoVIOEurocCustom.bash -p /home/rpikim/datasets/oakd_lite
 
 # Specify path of the EuRoC dataset.
 # The path can be absolute, or relative to this file location.
@@ -25,11 +25,7 @@ LOG_OUTPUT=0
 BUILD_PATH="../build"
 
 # Params path: specify where the parameters for Kimera are.
-# PARAMS_PATH="../params/D455" # will not crash but no good trajectory
-# PARAMS_PATH="../params/euroc_custom/oakd_lite" # crash with cv Mat assertion
-# PARAMS_PATH="../params/euroc_custom/oakd_lite_mono" # no crash
-# PARAMS_PATH="../params/euroc_custom/oakd_lite_26052025" # no crash
-PARAMS_PATH="../params/euroc_custom/oakd_lite_chobits_03062025" # no crash
+PARAMS_PATH="../params/euroc_custom/oakd_lite_mono_chobits_03062025" # no crash
 
 # Vocabulary path: specify where the vocabulary for loop closure is.
 VOCABULARY_PATH="../vocabulary"
@@ -95,7 +91,7 @@ $BUILD_PATH/stereoVIOEurocCustom \
   --dataset_type="$DATASET_TYPE" \
   --dataset_path="$DATASET_PATH" \
   --initial_k=50 \
-  --final_k=16200 \
+  --final_k=6200 \
   --euroc_custom_params_folder_path="$PARAMS_PATH" \
   --use_lcd="$USE_LCD" \
   --vocabulary_path="$VOCABULARY_PATH/ORBvoc.yml" \

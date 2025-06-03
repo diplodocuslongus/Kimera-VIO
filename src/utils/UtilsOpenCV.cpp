@@ -389,21 +389,21 @@ std::pair<double, double> UtilsOpenCV::ComputeRotationAndTranslationErrors(
 // Reads image and converts to 1 channel image.
 cv::Mat UtilsOpenCV::ReadAndConvertToGrayScale(const std::string& img_name,
                                                bool equalize) {
-    LOG(INFO) << "reading img " << img_name;
+    VLOG(110) << "reading img " << img_name;
   
-  // cv::Mat img = cv::imread(img_name, cv::IMREAD_ANYCOLOR);
-  cv::Mat img;
-    LOG(INFO) << "declared cv::Mat  img ";
-  try{
-  img = cv::imread(img_name, cv::IMREAD_GRAYSCALE);
-  //img = cv::imread(img_name, cv::IMREAD_ANYCOLOR);
-  } catch (const cv::Exception& e) {
-	  LOG(ERROR) << "can't open or read the image";
-  }
-  if (img.empty()){
-	  LOG(ERROR) << " image empty";
-  }
-    LOG(INFO) << "img nb channels" << img.channels();
+  cv::Mat img = cv::imread(img_name, cv::IMREAD_ANYCOLOR);
+  // cv::Mat img;
+  //   LOG(INFO) << "declared cv::Mat  img ";
+  // try{
+  // img = cv::imread(img_name, cv::IMREAD_GRAYSCALE);
+  // //img = cv::imread(img_name, cv::IMREAD_ANYCOLOR);
+  // } catch (const cv::Exception& e) {
+	//   LOG(ERROR) << "can't open or read the image";
+  // }
+  // if (img.empty()){
+	//   LOG(ERROR) << " image empty";
+  // }
+  //   LOG(INFO) << "img nb channels" << img.channels();
   if (img.channels() > 1) {
     LOG(WARNING) << "Converting img from BGR to GRAY...";
     cv::cvtColor(img, img, cv::COLOR_BGR2GRAY);
