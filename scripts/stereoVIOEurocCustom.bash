@@ -29,8 +29,8 @@ BUILD_PATH="../build"
 # PARAMS_PATH="../params/euroc_custom/oakd_lite" # crash with cv Mat assertion
 # PARAMS_PATH="../params/euroc_custom/oakd_lite_mono" # no crash
 # PARAMS_PATH="../params/euroc_custom/oakd_lite_26052025" # no crash
-# PARAMS_PATH="../params/euroc_custom/oakd_lite_chobits_03062025" # no crash
-PARAMS_PATH="../params/euroc_custom/oakd_lite_oak1" # no crash
+PARAMS_PATH="../params/euroc_custom/oakd_lite_chobits_03062025" # no crash
+# PARAMS_PATH="../params/euroc_custom/oakd_lite_oak1" # no crash
 
 # Vocabulary path: specify where the vocabulary for loop closure is.
 VOCABULARY_PATH="../vocabulary"
