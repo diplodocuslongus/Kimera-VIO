@@ -68,7 +68,9 @@ StereoCamera::StereoCamera(const CameraParams& left_cam_params,
   // https://github.com/opencv/opencv/blob/master/modules/calib3d/src/calibration.cpp
   // NOTE: OpenCV pose convention is the opposite, therefore the missing -1.0
   CHECK_NE(Q_.at<double>(3, 2), 0.0);
-  stereo_baseline_ = 1.0 / Q_.at<double>(3, 2);
+  // when using kalibr calib result
+  stereo_baseline_ = -1.0 / Q_.at<double>(3, 2);
+  // stereo_baseline_ = 1.0 / Q_.at<double>(3, 2);
   CHECK_GT(stereo_baseline_, 0.0);
 
   //! Create stereo camera calibration after rectification and undistortion.

@@ -16,7 +16,7 @@ maxFeaturesPerFrame: 300
 
 # Good Features To Track specific parameters
 quality_level: 0.01
-min_distance: 10
+min_distance: 20
 block_size: 3
 use_harris_detector: 0
 k: 0.04
@@ -62,15 +62,15 @@ ransac_max_iterations: 100
 ransac_probability: 0.995
 ransac_randomize: 0
 min_intra_keyframe_time: 0.2
-max_intra_keyframe_time: 5.0
+max_intra_keyframe_time: 10.0
 max_disparity_since_lkf: 200 #large value to disable
 minNumberFeatures: 20
-useStereoTracking: 1
+useStereoTracking: 0
 disparityThreshold: 0.5
 # Type of optical flow predictor to aid feature tracking:
 # 0: Static - assumes no optical flow between images (aka static camera).
 # 1: Rotational - use IMU gyro to estimate optical flow.
-optical_flow_predictor_type: 0
+optical_flow_predictor_type: 1
 
 # 2D-2D pose estimation method
 use_2d2d_tracking: 1
@@ -78,12 +78,12 @@ use_2d2d_tracking: 1
 optimize_2d2d_pose_from_inliers: 0
 
 # 3D-3D pose estimation
-use_3d3d_tracking: 1
+use_3d3d_tracking: 0
 optimize_3d3d_pose_from_inliers: 0
 
 # 2D-3D pose estimation method
 use_pnp_tracking: 0
 pnp_algorithm: 3 # EPNP
-min_pnp_inliers: 20
+min_pnp_inliers: 10
 ransac_threshold_pnp: 1.0 # pixels
 optimize_2d3d_pose_from_inliers: 0
