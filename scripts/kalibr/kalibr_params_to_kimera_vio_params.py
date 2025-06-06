@@ -152,8 +152,10 @@ def load_kalibr_information_from_files(camera_file, imu_file):
 def load_kalibr_information(result_directory):
     """Detect and load kalibr results from a directory."""
     result_path = pathlib.Path(result_directory)
-    potential_camchains = list(result_path.glob("camchain-*imu*cam*.yaml"))
-    potential_imus = list(result_path.glob("imu*.yaml"))
+    potential_camchains = list(result_path.glob("*camchain-imucam*.yaml"))
+    # potential_camchains = list(result_path.glob("camchain-*imu*cam*.yaml"))
+    potential_imus = list(result_path.glob("*imu.yaml"))
+    # potential_imus = list(result_path.glob("imu*.yaml"))
 
     if len(potential_camchains) == 0:
         raise RuntimeError("could not find camchain file")
