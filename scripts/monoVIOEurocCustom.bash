@@ -26,6 +26,7 @@ BUILD_PATH="../build"
 
 # Params path: specify where the parameters for Kimera are.
 # PARAMS_PATH="../params/euroc_custom/oakd_lite_mono_chobits_03062025" # no crash
+# PARAMS_PATH="../params/oaktest" # uses calibration result from Kalibr
 PARAMS_PATH="../params/euroc_custom/oakd_lite_oak1_mono" # uses calibration result from Kalibr
 
 # Vocabulary path: specify where the vocabulary for loop closure is.
@@ -47,6 +48,10 @@ else
         # Option -p, provides path to dataset.
       -p) DATASET_PATH=$2
           echo "Using dataset at path: $DATASET_PATH"
+          shift ;;
+        # Option --params, provides path to parameters
+      -r) PARAMS_PATH=$2
+          echo "Using parameters at path: $PARAMS_PATH"
           shift ;;
         # Option -d, set dataset type
       -d) DATASET_TYPE=$2
