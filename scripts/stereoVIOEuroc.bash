@@ -26,7 +26,9 @@ LOG_OUTPUT=0
 BUILD_PATH="../build"
 
 # Params path: specify where the parameters for Kimera are.
-PARAMS_PATH="../params/Euroc"
+# PARAMS_PATH="../params/Euroc_own_kalibr"
+PARAMS_PATH="../arams/Euroc_own_kalibr"
+# PARAMS_PATH="../params/Euroc"
 # PARAMS_PATH="../params/EurocMono"  # use this for monocular-mode (left cam only)
 
 # Vocabulary path: specify where the vocabulary for loop closure is.
@@ -48,6 +50,10 @@ else
         # Option -p, provides path to dataset.
       -p) DATASET_PATH=$2
           echo "Using dataset at path: $DATASET_PATH"
+          shift ;;
+        # Option --params, provides path to parameters
+      -r) PARAMS_PATH=$2
+          echo "Using parameters at path: $PARAMS_PATH"
           shift ;;
         # Option -d, set dataset type
       -d) DATASET_TYPE=$2
@@ -103,7 +109,7 @@ $BUILD_PATH/stereoVIOEuroc \
   --logtostderr=1 \
   --colorlogtostderr=1 \
   --log_prefix=1 \
-  --v=100 \
+  --v=0 \
   --vmodule=Pipeline*=00 \
   --log_output="$LOG_OUTPUT" \
   --log_euroc_gt_data="$LOG_OUTPUT" \
